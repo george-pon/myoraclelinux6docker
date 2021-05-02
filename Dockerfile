@@ -7,14 +7,20 @@ ENV MYORACLELINUX6DOCKER_IMAGE myoraclelinux6docker
 
 
 # set install flag manual page
-# RUN sed -i -e"s/^tsflags=nodocs/\# tsflags=nodocs/" /etc/yum.conf
+RUN sed -i -e"s/^tsflags=nodocs/\# tsflags=nodocs/" /etc/yum.conf
+
+# update all packages
+RUN yum -y update && yum clean all
+
+# install wget
+RUN yum install -y wget && yum clean all
 
 # setup repo
 # see https://docs.oracle.com/cd/E96517_01/ladbi/installing-oracle-linux-with-public-yum-repository-support.html#GUID-190BAEE2-2B77-4AA2-AA6B-5D6AF73A4005 Oracle Linux YumサーバーによるOracle Linuxのインストールのサポート
-# RUN wget http://yum.oracle.com/public-yum-ol6.repo -O /etc/yum.repos.d/public-yum-ol6.repo
+RUN wget http://yum.oracle.com/public-yum-ol6.repo -O /etc/yum.repos.d/public-yum-ol6.repo
 
 # update all packages
-# RUN yum -y update && yum clean all
+RUN yum -y update && yum clean all
 
 # set locale to Japanese
 # RUN localedef -i ja_JP -f UTF-8 ja_JP.UTF-8
@@ -22,39 +28,42 @@ ENV MYORACLELINUX6DOCKER_IMAGE myoraclelinux6docker
 # ENV LANG ja_JP.UTF-8
 
 # install man, man-pages
-# RUN yum -y install man man-pages man-pages-ja && yum clean all
+RUN yum -y install man man-pages man-pages-ja && yum clean all
 
 # install tools
-# RUN yum install -y \
-#         bash-completion \
-#         bind-utils \
-#         connect \
-#         connect-proxy \
-#         curl \
-#         emacs-nox \
-#         expect \
-#         gettext \
-#         git \
-#         iproute \
-#         jq \
-#         lsof \
-#         make \
-#         net-tools \
-#         nmap-ncat \
-#         openssh-clients \
-#         openssh-server \
-#         python-pip \
-#         stress \
-#         sudo \
-#         tcpdump \
-#         traceroute \
-#         tree \
-#         unzip \
-#         vim \
-#         w3m \
-#         wget \
-#         zip \
-#     && yum clean all
+RUN yum install -y \
+        bash-completion \
+        bind-utils \
+        connect \
+        connect-proxy \
+        curl \
+        emacs-nox \
+        expect \
+        gettext \
+        git \
+        iproute \
+        jq \
+        lsof \
+        make \
+        net-tools \
+        nmap-ncat \
+        openssh-clients \
+        openssh-server \
+        python-pip \
+        stress \
+        sudo \
+        tcpdump \
+        traceroute \
+        tree \
+        unzip \
+        vim \
+        w3m \
+        wget \
+        zip \
+    && yum clean all
+
+
+
 
 ADD docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN /bin/chmod +x /usr/local/bin/docker-entrypoint.sh
