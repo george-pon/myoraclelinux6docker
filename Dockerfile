@@ -17,7 +17,7 @@ RUN yum install -y wget && yum clean all
 
 # setup repo
 # see https://docs.oracle.com/cd/E96517_01/ladbi/installing-oracle-linux-with-public-yum-repository-support.html#GUID-190BAEE2-2B77-4AA2-AA6B-5D6AF73A4005 Oracle Linux YumサーバーによるOracle Linuxのインストールのサポート
-RUN wget http://yum.oracle.com/public-yum-ol6.repo -O /etc/yum.repos.d/public-yum-ol6.repo
+# RUN wget http://yum.oracle.com/public-yum-ol6.repo -O /etc/yum.repos.d/public-yum-ol6.repo
 
 # update all packages
 RUN yum -y update && yum clean all
