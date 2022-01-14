@@ -3,9 +3,17 @@
 # リポジトリにpushする
 #
 
-REPO_PREFIX=${REPO_PREFIX:-docker.io/georgesan}
+TAG_LIST=$(awk '/^ENV MYORACLELINUX6DOCKER_VERSION/ {print $3;}' Dockerfile)
+TAG_LIST="$TAG_LIST monthly$(date +%Y%m) "
+IMAGE_NAME=$(awk '/^ENV MYORACLELINUX6DOCKER_IMAGE/ {print $3;}' Dockerfile)
 
-docker tag myoraclelinux6docker:latest ${REPO_PREFIX}/myoraclelinux6docker:latest
+REPO_SERV=${REPO_SERV:-docker.io/georgesan/}
 
-docker push ${REPO_PREFIX}/myoraclelinux6docker:latest
+for i in $TAG_LIST
+do
+    echo $SUDO_DOCKER docker tag ${IMAGE_NAME}:$i ${REPO_SERV}${IMAGE_NAME}:$i
+    $SUDO_DOCKER docker tag ${IMAGE_NAME}:$i ${REPO_SERV}${IMAGE_NAME}:$i
+    echo $SUDO_DOCKER docker push ${REPO_SERV}${IMAGE_NAME}:$i
+    $SUDO_DOCKER docker push ${REPO_SERV}${IMAGE_NAME}:$i
+done
 
